@@ -31,7 +31,7 @@ sudo sed -i '14i\\t# File upload size increased by origin.sh script\
 
 # Make sure to change the allowed IP address to the network / address which will push the cunks. Please refer to the wiki if you need any further information.
 
-sudo sed -i '49i\\t# Custom block allowing HTTP PUT method only in /vod directory and only for the defined IP/network
+sudo sed -i '49i\\t# Custom block allowing HTTP PUT method only in /vod directory and only for the defined IP/network\
 	location /vod { \
                 dav_methods  PUT;\
                 limit_except  GET HEAD {\
