@@ -35,7 +35,7 @@ sudo sed -i '49i\\t# Custom block allowing HTTP PUT method only in /vod director
 	location /vod { \
                 dav_methods  PUT;\
                 limit_except  GET HEAD {\
-                        allow $ipadd;\
+                        allow '$ipadd';\
                         deny  all;\
                 }\
         }' /etc/nginx/sites-available/default
