@@ -6,7 +6,7 @@ I have created a simple bash script how you can create an NGINX origin server wh
 
 My test scenario is a server running ffmpeg creating the HLS chunks and the manifest file pushing the content to a remote web server running NGINX. The script installs automatically NGINX and do the required changes in the NGINX configuration files using the [SED](http://www.grymoire.com/Unix/Sed.html 'SED syntax') command. The name of the script is [origin.sh](https://github.com/stoyanovgeorge/origin_server/blob/master/origin.sh 'Origin Server Creation Script'), you just need to clone it and edit it in order to fit your use case. I have inserted comments where it needs eventually some change from your side. 
 
-I have also created a WIKI page where I have explained in details the commands and how you can harden the access to the origin server. So make sure to check my [WIKI](https://github.com/stoyanovgeorge/origin_server/wiki 'Origin Server Wiki')
+I have also created a WIKI page where I have explained in details the commands and how you can harden the access to the origin server. So make sure to check my [WIKI](https://github.com/stoyanovgeorge/origin_server/wiki 'Origin Server Wiki').
 
 ### Bugs and Missing Features
 
