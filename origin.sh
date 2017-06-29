@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo "Please define the IP address or network from which you are going to stream the HLS content followed by / and the network mask. For example 192.168.178.0/24 will allow all IPs from this network, while 192.168.178.100/32 will allow only this particular IP and press [ENTER]:"
+
+read ipadd
+
 echo "System update"
 
 sudo apt update
@@ -22,15 +26,16 @@ echo "Change of the NGINX configuration"
 
 # Here you can change the client_max_body_size to a custom value, it is set to 50Mb, so files larger than 50Mb won't be accepted.
 
-sudo sed -i '14i\\t#File upload size increased by origin.sh script\
+sudo sed -i '14i\\t# File upload size increased by origin.sh script\
 	client_max_body_size 50m;' /etc/nginx/nginx.conf
 
 # Make sure to change the allowed IP address to the network / address which will push the cunks. Please refer to the wiki if you need any further information.
 
-sudo sed -i '49i\\tlocation /vod { \
+sudo sed -i '49i\\t# Custom block allowing HTTP PUT method only in /vod directory and only for the defined IP/network
+	location /vod { \
                 dav_methods  PUT;\
                 limit_except  GET HEAD {\
-                        allow IP.AD.DR.ES/32;\
+                        allow $ipadd;\
                         deny  all;\
                 }\
         }' /etc/nginx/sites-available/default
