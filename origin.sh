@@ -22,12 +22,12 @@ echo "Change of the NGINX configuration"
 
 # Here you can change the client_max_body_size to a custom value, it is set to 50Mb, so files larger than 50Mb won't be accepted.
 
-sudo sed -i '14i\t#File upload size increased by origin.sh script\
+sudo sed -i '14i\\t#File upload size increased by origin.sh script\
 	client_max_body_size 50m;' /etc/nginx/nginx.conf
 
 # Make sure to change the allowed IP address to the network / address which will push the cunks. Please refer to the wiki if you need any further information.
 
-sudo sed -i '49i\tlocation /vod { \
+sudo sed -i '49i\\tlocation /vod { \
                 dav_methods  PUT;\
                 limit_except  GET HEAD {\
                         allow IP.AD.DR.ES/32;\
