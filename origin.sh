@@ -20,7 +20,16 @@ echo "Destination directory creation"
 # You can change here the destination directory. In this script all the chunks and manifest files will be stored in /var/www/html/vod directory.
 
 sudo mkdir /var/www/html/vod
-sudo chown -R www-data:www-data /var/www/html/vod
+sudo mkdir /var/www/html/live
+sudo chown -R www-data:www-data /var/www/html/vod /var/www/html/live
+
+echo "Creation of auto-delete script and putting it in the crontab"
+
+# This script will delete all files older than 1 minute, you can modify it in order to delete only ts files. 
+
+sudo mkdir /home/$hostname/scripts
+#touch 
+
 
 echo "Change of the NGINX configuration"
 
@@ -34,6 +43,14 @@ sudo sed -i '14i\\t# File upload size increased by origin.sh script\
 sudo sed -i '49i\\t# Custom block allowing HTTP PUT method only in /vod directory and only for the defined IP/network\
 	location /vod { \
                 dav_methods  PUT;\
+                limit_except  GET HEAD {\
+                        allow '$ipadd';\
+                        deny  all;\
+                }\
+        }
+	\
+	location /live {\
+		 dav_methods  PUT;\
                 limit_except  GET HEAD {\
                         allow '$ipadd';\
                         deny  all;\
