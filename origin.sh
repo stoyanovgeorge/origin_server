@@ -23,6 +23,8 @@ sudo mkdir /var/www/html/vod
 sudo mkdir /var/www/html/live
 sudo chown -R www-data:www-data /var/www/html/vod /var/www/html/live
 
+# sudo rm /var/www/html/index.nginx-debian.html
+
 echo "Creation of auto-delete script and putting it in the crontab"
 
 # This script will add a line in the crontab for deletion of files older than 1 minute in the /var/www/html/live directory. 
@@ -42,15 +44,17 @@ sudo sed -i '49i\\t# Custom block allowing HTTP PUT method only in /vod director
 	\
 	location /vod { \
                 dav_methods  PUT;\
-                limit_except  GET HEAD {\
+                create_full_put_path on;\
+		limit_except  GET HEAD {\
                         allow '$ipadd';\
                         deny  all;\
                 }\
         }\
 	\
 	location /live {\
-		 dav_methods  PUT;\
-                limit_except  GET HEAD {\
+		dav_methods  PUT DELETE;\
+                create_full_put_path on;\
+		limit_except  GET HEAD {\
                         allow '$ipadd';\
                         deny  all;\
                 }\
