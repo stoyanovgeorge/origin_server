@@ -25,11 +25,9 @@ sudo chown -R www-data:www-data /var/www/html/vod /var/www/html/live
 
 echo "Creation of auto-delete script and putting it in the crontab"
 
-# This script will delete all files older than 1 minute, you can modify it in order to delete only ts files. 
+# This script will add a line in the crontab for deletion of files older than 1 minute in the /var/www/html/live directory. 
 
-sudo mkdir /home/$hostname/scripts
-#touch 
-
+sh scripts/crontab.sh
 
 echo "Change of the NGINX configuration"
 
@@ -41,13 +39,14 @@ sudo sed -i '14i\\t# File upload size increased by origin.sh script\
 # Make sure to change the allowed IP address to the network / address which will push the cunks. Please refer to the wiki if you need any further information.
 
 sudo sed -i '49i\\t# Custom block allowing HTTP PUT method only in /vod directory and only for the defined IP/network\
+	\
 	location /vod { \
                 dav_methods  PUT;\
                 limit_except  GET HEAD {\
                         allow '$ipadd';\
                         deny  all;\
                 }\
-        }
+        }\
 	\
 	location /live {\
 		 dav_methods  PUT;\
