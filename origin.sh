@@ -43,7 +43,9 @@ sudo sed -i '14i\\t# File upload size increased by origin.sh script\
 sudo sed -i '49i\\t# Custom block allowing HTTP PUT method only in /vod directory and only for the defined IP/network\
 	\
 	location /vod { \
-                dav_methods  PUT;\
+                add_header "Access-Control-Allow-Origin"  *;
+                add_header 'Access-Control-Allow-Methods' 'PUT, DELETE';
+		dav_methods  PUT;\
                 create_full_put_path on;\
 		limit_except  GET HEAD {\
                         allow '$ipadd';\
@@ -52,6 +54,8 @@ sudo sed -i '49i\\t# Custom block allowing HTTP PUT method only in /vod director
         }\
 	\
 	location /live {\
+		add_header "Access-Control-Allow-Origin"  *;
+                add_header 'Access-Control-Allow-Methods' 'PUT, DELETE';
 		dav_methods  PUT DELETE;\
                 create_full_put_path on;\
 		limit_except  GET HEAD {\
