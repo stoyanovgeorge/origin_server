@@ -44,7 +44,7 @@ sudo sed -i '49i\\t# Custom block allowing HTTP PUT method only in /vod director
 	\
 	location /vod { \
                 add_header "Access-Control-Allow-Origin"  *;
-                add_header 'Access-Control-Allow-Methods' 'PUT, DELETE';
+                add_header 'Access-Control-Allow-Methods' 'PUT';
 		dav_methods  PUT;\
                 create_full_put_path on;\
 		limit_except  GET HEAD {\
