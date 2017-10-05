@@ -44,7 +44,7 @@ sudo sed -i '49i\\t# Custom block allowing the following WEBDAV methods: HTTP PU
 	\
 	location /vod { \
                 add_header "Access-Control-Allow-Origin"  *;
-                add_header 'Access-Control-Allow-Methods' 'PUT MKCOL';
+                add_header 'Access-Control-Allow-Methods' 'PUT, MKCOL, PROPFIND';
 		dav_methods  PUT MKCOL;\
 		dav_ext_methods PROPFIND OPTIONS;
                 create_full_put_path on;\
@@ -56,7 +56,7 @@ sudo sed -i '49i\\t# Custom block allowing the following WEBDAV methods: HTTP PU
 	\
 	location /live {\
 		add_header "Access-Control-Allow-Origin"  *;
-                add_header 'Access-Control-Allow-Methods' 'PUT, DELETE MKCOL';
+                add_header 'Access-Control-Allow-Methods' 'PUT, DELETE, MKCOL, PROPFIND';
 		dav_methods  PUT DELETE MKCOL;\
 		dav_ext_methods PROPFIND OPTIONS;
                 create_full_put_path on;\
