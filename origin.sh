@@ -11,9 +11,9 @@ sudo apt upgrade -y
 sudo apt dist-upgrade -y
 sudo apt autoremove -y
 
-echo "NGINX Installation"
+echo "NGINX Installation with dav_ext_methods support"
 
-sudo apt install nginx -y
+sudo apt install nginx-full -y
 
 echo "Destination directory creation"
 
@@ -40,12 +40,13 @@ sudo sed -i '14i\\t# File upload size increased by origin.sh script\
 
 # Make sure to change the allowed IP address to the network / address which will push the cunks. Please refer to the wiki if you need any further information.
 
-sudo sed -i '49i\\t# Custom block allowing HTTP PUT method only in /vod directory and only for the defined IP/network\
+sudo sed -i '49i\\t# Custom block allowing the following WEBDAV methods: HTTP PUT, DELETE, MKCOL and PROPFIND methods only in /vod directory and only for the defined IP/network\
 	\
 	location /vod { \
                 add_header "Access-Control-Allow-Origin"  *;
-                add_header 'Access-Control-Allow-Methods' 'PUT';
-		dav_methods  PUT;\
+                add_header 'Access-Control-Allow-Methods' 'PUT MKCOL';
+		dav_methods  PUT MKCOL;\
+		dav_ext_methods PROPFIND OPTIONS;
                 create_full_put_path on;\
 		limit_except  GET HEAD {\
                         allow '$ipadd';\
@@ -55,8 +56,9 @@ sudo sed -i '49i\\t# Custom block allowing HTTP PUT method only in /vod director
 	\
 	location /live {\
 		add_header "Access-Control-Allow-Origin"  *;
-                add_header 'Access-Control-Allow-Methods' 'PUT, DELETE';
-		dav_methods  PUT DELETE;\
+                add_header 'Access-Control-Allow-Methods' 'PUT, DELETE MKCOL';
+		dav_methods  PUT DELETE MKCOL;\
+		dav_ext_methods PROPFIND OPTIONS;
                 create_full_put_path on;\
 		limit_except  GET HEAD {\
                         allow '$ipadd';\
