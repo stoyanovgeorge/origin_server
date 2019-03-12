@@ -20,12 +20,12 @@ done
 function nginx_install {
     # Updates and install the full NGINX server
     echo "System update"
-    sudo apt update 1> /dev/null
-    sudo apt upgrade -y 1> /dev/null
-    sudo apt dist-upgrade -y 1> /dev/null
-    sudo apt autoremove -y 1> /dev/null
+    sudo apt-get update 1> /dev/null
+    sudo apt-get upgrade -y 1> /dev/null
+    sudo apt-get dist-upgrade -y 1> /dev/null
+    sudo apt-get autoremove -y 1> /dev/null
     echo "NGINX Installation with dav_ext_methods support"
-    sudo apt install nginx-full -y 1> /dev/null
+    sudo apt-get install nginx-full -y 1> /dev/null
 }
 
 function dir_creation {
