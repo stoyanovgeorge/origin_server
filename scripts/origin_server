@@ -1,0 +1,45 @@
+error_log /var/log/nginx/origin_server/error.log;
+access_log /var/log/nginx/origin_server/access.log;
+
+server {
+  root /var/www/html/;
+
+  location /live/upload {
+    dav_methods PUT DELETE;
+    create_full_put_path on;
+    server_tokens off;
+    dav_access   group:rw all:r;
+    client_body_temp_path /var/www/html/live/tmp;
+  }
+  location /live/public {
+    alias /var/www/html/vod/upload;
+    # autoindex on;
+    add_header "Access-Control-Allow-Origin"  *;
+    limit_except  GET {
+            allow 10.0.0.0/8;
+            allow 172.16.0.0/12;
+            allow 192.168.0.0/16;
+            allow 127.0.0.1;
+            deny  all;
+    }
+  }
+    location /vod/upload {
+    dav_methods PUT DELETE;
+    create_full_put_path on;
+    server_tokens off;
+    dav_access   group:rw all:r;
+    client_body_temp_path /var/www/html/live/tmp;
+  }
+  location /vod/public {
+    alias /var/www/html/live/upload;
+    # autoindex on;
+    add_header "Access-Control-Allow-Origin"  *;
+    limit_except  GET {
+            allow 10.0.0.0/8;
+            allow 172.16.0.0/12;
+            allow 192.168.0.0/16;
+            allow 127.0.0.1;
+            deny  all;
+    }
+  }
+}
