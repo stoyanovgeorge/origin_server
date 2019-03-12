@@ -31,9 +31,9 @@ function nginx_install {
 function dir_creation {
     echo "Destination directory creation"
     # You can change here the destination directory. In this script all the chunks and manifest files will be stored in /var/www/html/vod directory.
-    sudo mkdir /var/www/html/vod/upload
+    sudo mkdir -p /var/www/html/vod/upload
     sudo mkdir /var/www/html/vod/tmp
-    sudo mkdir /var/www/html/live/upload
+    sudo mkdir -p /var/www/html/live/upload
     sudo mkdir /var/www/html/live/tmp
     sudo mkdir /var/log/nginx/origin_server
     sudo chown -R www-data:www-data /var/www/html/vod /var/www/html/live

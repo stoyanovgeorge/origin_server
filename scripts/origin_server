@@ -28,7 +28,7 @@ server {
     create_full_put_path on;
     server_tokens off;
     dav_access   group:rw all:r;
-    client_body_temp_path /var/www/html/live/tmp;
+    client_body_temp_path /var/www/html/vod/tmp;
   }
   location /vod/public {
     alias /var/www/html/live/upload;
