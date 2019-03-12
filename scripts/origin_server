@@ -20,7 +20,6 @@ server {
             allow 172.16.0.0/12;
             allow 192.168.0.0/16;
             allow 127.0.0.1;
-            allow 185.71.87.188/32;
             deny  all;
     }
   }
@@ -40,7 +39,6 @@ server {
             allow 172.16.0.0/12;
             allow 192.168.0.0/16;
             allow 127.0.0.1;
-            allow 185.71.87.188/32;
             deny  all;
     }
   }
