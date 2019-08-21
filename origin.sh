@@ -4,7 +4,9 @@
 n='([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])'
 m='([0-9]|[12][0-9]|3[012])'
 
-printf "Please define the IP address or network from which you are going to stream the HLS content followed by / and the network mask. For example 192.168.178.0/24 will allow all IPs from this network, while 192.168.178.100/32 will allow only this particular IP. You can also leave it empty and only access from the private IP networks will be allowed.\n\n"
+printf "Please define the IP address or network from which you are going to stream the HLS content followed by / and the network mask. \
+For example 192.168.178.0/24 will allow all IPs from this network, while 192.168.178.100/32 will allow only this particular IP. \
+You can also leave it empty and only access from the private IP networks will be allowed.\n\n"
 
 # While loop until the user input is a valid IP adress or empty.
 while true
@@ -30,7 +32,8 @@ function nginx_install {
 
 function dir_creation {
     echo "Destination directory creation"
-    # You can change here the destination directory. In this script all the chunks and manifest files will be stored in /var/www/html/vod directory.
+    # You can change here the destination directory. 
+    # In this script all the chunks and manifest files will be stored in /var/www/html/vod directory.
     sudo mkdir -p /var/www/html/vod/upload
     sudo mkdir /var/www/html/vod/tmp
     sudo mkdir -p /var/www/html/live/upload
@@ -46,7 +49,8 @@ function dir_creation {
 }
 
 function autodelete {
-    # Most of the packagers nowadays have such a built-in function so this is an optional step
+    # Most of the packagers nowadays have such a built-in function so this is an optional step. 
+    # Usually the packager is sending DELETE request which is deleting the old chunks. 
     echo "Creation of auto-delete script and putting it in the crontab"
 
     # This script will add a line in the crontab for deletion of files older than 1 minute in the /var/www/html/live directory. 
@@ -57,10 +61,12 @@ function autodelete {
 function nginx_configuration {
     echo "Change of the NGINX configuration"
 
-    # Here you can change the client_max_body_size to a custom value, it is set to 50Mb, so files larger than 50Mb won't be accepted.
+    # Here you can change the client_max_body_size to a custom value, it is set to 50Mb.
+    # Files larger than 50Mb won't be accepted.
     sudo sed -i '14i\\tclient_max_body_size 50m;' /etc/nginx/nginx.conf
     
-    # Make sure to change the allowed IP address to the network / address which will push the cunks. Please refer to the wiki if you need any further information.
+    # Make sure to change the allowed IP address to the network / address which will push the chunks. 
+    # Please refer to the wiki if you need any further information.
     if [ ! -z "$ipaddr" ];
     then
         sed -i "22 a \ \ \ \ \ \ \ \ \ \ \ \ allow $ipaddr;" scripts/origin_server 
