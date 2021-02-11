@@ -5,15 +5,19 @@ server {
   root /var/www/html/;
 
   location /live/upload {
-    dav_methods PUT DELETE;
+    dav_methods PUT MKCOL DELETE;
     create_full_put_path on;
     server_tokens off;
     dav_access   group:rw all:r;
     client_body_temp_path /var/www/html/live/tmp;
+    limit_except PUT DELETE MKCOL {
+        deny all;
+    }
   }
   location /live/public {
-    alias /var/www/html/vod/upload;
+    alias /var/www/html/live/upload;
     # autoindex on;
+    server_tokens off;
     add_header "Access-Control-Allow-Origin"  *;
     limit_except  GET {
             allow 10.0.0.0/8;
@@ -24,15 +28,19 @@ server {
     }
   }
     location /vod/upload {
-    dav_methods PUT DELETE;
+    dav_methods PUT MKCOL DELETE;
     create_full_put_path on;
     server_tokens off;
     dav_access   group:rw all:r;
     client_body_temp_path /var/www/html/vod/tmp;
+    limit_except PUT DELETE MKCOL {
+        deny all;
+    }
   }
   location /vod/public {
-    alias /var/www/html/live/upload;
+    alias /var/www/html/vod/upload;
     # autoindex on;
+    server_tokens off;
     add_header "Access-Control-Allow-Origin"  *;
     limit_except  GET {
             allow 10.0.0.0/8;
