@@ -32,7 +32,7 @@ function nginx_install {
 
 function dir_creation {
     echo "Destination directory creation"
-    # You can change here the destination directory. 
+    # You can change here the destination directory.
     # In this script all the chunks and manifest files will be stored in /var/www/html/vod directory.
     sudo mkdir -p /var/www/html/vod/upload
     sudo mkdir /var/www/html/vod/tmp
@@ -40,7 +40,7 @@ function dir_creation {
     sudo mkdir /var/www/html/live/tmp
     sudo mkdir /var/log/nginx/origin_server
     sudo chown -R www-data:www-data /var/www/html/vod /var/www/html/live
-    
+
     # Checks if /var/www/html/index.nginx-debian.html exists and if it does, it deletes it.
     if [ -f /var/www/html/index.nginx-debian.html ];
     then
@@ -49,13 +49,19 @@ function dir_creation {
 }
 
 function autodelete {
-    # Most of the packagers nowadays have such a built-in function so this is an optional step. 
-    # Usually the packager is sending DELETE request which is deleting the old chunks. 
-    echo "Creation of auto-delete script and putting it in the crontab"
-
-    # This script will add a line in the crontab for deletion of files older than 1 minute in the /var/www/html/live directory. 
-
-    sh scripts/crontab.sh
+    # Most of the packagers nowadays have such a built-in function so this is an optional step.
+    # Usually the packager is sending DELETE request which is deleting the old chunks.
+    while true
+        # This script will add a line in the crontab for deletion of files older than 1 minute in the /var/www/html/live directory.
+        do
+        IFS= read -rp "Do you want to enable a script in the crontab to delete segments older than 1 minute: " crontab_delete
+        case $crontab_delete in
+            [Yy]* )  sh scripts/crontab.sh;;
+            # echo "Creation of auto-delete script and putting it in the crontab";
+            [Nn]* ) continue;;
+            * ) echo "Please answer with Y/N.";;
+        esac
+    done
 }
 
 function nginx_configuration {
@@ -64,20 +70,31 @@ function nginx_configuration {
     # Here you can change the client_max_body_size to a custom value, it is set to 50Mb.
     # Files larger than 50Mb won't be accepted.
     sudo sed -i '14i\\tclient_max_body_size 50m;' /etc/nginx/nginx.conf
-    
-    # Make sure to change the allowed IP address to the network / address which will push the chunks. 
+
+    # Make sure to change the allowed IP address to the network / address which will push the chunks.
     # Please refer to the wiki if you need any further information.
-    if [ ! -z "$ipaddr" ];
+    if [ -n "$ipaddr" ];
     then
-        sed -i "22 a \ \ \ \ \ \ \ \ \ \ \ \ allow $ipaddr;" scripts/origin_server 
-        sed -i "42 a \ \ \ \ \ \ \ \ \ \ \ \ allow $ipaddr;" scripts/origin_server 
-    fi  
+        sed -i "24 a \ \ \ \ \ \ \ \ \ \ \ \ allow $ipaddr;" scripts/origin_server
+        sed -i "47 a \ \ \ \ \ \ \ \ \ \ \ \ allow $ipaddr;" scripts/origin_server
+    fi
     sudo cp scripts/origin_server /etc/nginx/sites-available
     sudo ln -s /etc/nginx/sites-available/origin_server /etc/nginx/sites-enabled/origin_server
+
 
     # Checks if the nginx configuration is correct
     if sudo nginx -t &> /dev/null
         then
+        while true
+        do
+            IFS= read -rp "Do you want to remove the default NGINX configuration file from sites-enabled: " default_delete
+            case $default_delete in
+                [Yy]* )  sudo rm /etc/nginx/sites-enabled/default;;
+                [Nn]* ) continue;;
+                * ) echo "Please answer with Y/N.";;
+            esac
+        done
+
         echo "NGINX will be restarted"
         sudo service nginx restart
         echo "The installation of Origin Server finished successfully"
